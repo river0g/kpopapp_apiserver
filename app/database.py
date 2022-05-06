@@ -95,9 +95,7 @@ async def db_create_jwt_token(data: dict) -> str:
             status_code=400, detail=f"{username}, Invalid username or password")
 
     # token = auth.encode_jwt(username)
-    token = auth.encode_jwt(user['superuser'])
-    t = {
-        'token': token
+    token: str = auth.encode_jwt(user['superuser'])
+    return {
+        "token": token
     }
-    # return token
-    return t

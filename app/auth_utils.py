@@ -50,7 +50,7 @@ class AuthJwt():
             )
 
     def verify_jwt(self, request, username) -> str:
-        token: str = request.headers.get("authorization")
+        token: str = request.headers.get("Authorization")
         if not token:
             raise HTTPException(
                 status_code=401, detail='No JWT exist: may not set yet or deleted'

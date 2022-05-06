@@ -7,3 +7,4 @@ sandbox.py
 fetch_mongoapi.py
 mongodb.py
 function.zip
+.DS_Store

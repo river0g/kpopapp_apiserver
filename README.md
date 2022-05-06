@@ -20,7 +20,12 @@ post api/jwttoken
 get api/todo \
 post api/todo
 
-## サーバー起動には...
+## Lambda にデプロイするまでの流れ
 
-uvicorn main:app --reload \
-すれば良い。
+- for_lambda.sh を実行する
+
+## 環境変数
+
+- MONGO_API_KEY={mongodb の URI}
+- JWT_KEY={JWT を作成する時の任意の値。}
+- ROOT_USER={認証用のキー的な}

@@ -23,7 +23,7 @@ def root():
 
 
 @app.post('/')
-def root_post(request: Request, data: dict):
+def root_post(request: Request, data: dict):  # test用
     print(request.headers)
     return {
         "message": "POSTED DATA",
