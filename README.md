@@ -29,3 +29,8 @@ post api/todo
 - MONGO_API_KEY={mongodb の URI}
 - JWT_KEY={JWT を作成する時の任意の値。}
 - ROOT_USER={認証用のキー的な}
+
+## todo
+
+- plaintext メールから html メールにしてスクレイピングした記事をメールで通知。
+- コードの整理。
