@@ -1,0 +1,9 @@
+.env
+__pycache__
+apienv
+app/__pycache__
+routes/__pycache__
+sandbox.py
+fetch_mongoapi.py
+mongodb.py
+function.zip
