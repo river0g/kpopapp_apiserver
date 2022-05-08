@@ -4,6 +4,7 @@ from typing import Union
 from app.auth_utils import AuthJwt
 from fastapi import HTTPException
 from typing import List
+from datetime import datetime, timedelta
 
 MONGO_API_KEY = config('MONGO_API_KEY')
 
@@ -33,20 +34,47 @@ async def db_create_articles(data: List[dict]) -> Union[dict, bool]:
     articles = await collection_articles.insert_many(data)
 
 
-# 最新記事10件を取得する。
-async def db_get_new_articles() -> List[dict]:
+# 指定されたグループの記事の最新100件を取得する。
+async def db_get_group_articles(group_name) -> List[dict]:
     articles = []
-    db_articles = await collection_articles.find().sort("datetime", -1).to_list(10)
+    db_articles = await collection_articles.find({"group": group_name}).sort("datetime", -1).to_list(100)
     for article in db_articles:
         articles.append(article_serializer(article))
 
     return articles
 
 
-# 記事を取得する。
+# 各グループ30件の新着記事を取得(取得数=len(group_list)*30)
+async def db_get_groups_articles() -> List[dict]:
+    group_list = ['blackpink', 'aespa', 'ive', 'gi-dle', 'nmixx', 'kep1er']
+    articles = []
+    for group in group_list:
+        article_list = await collection_articles.find({"group": group}).sort("datetime", -1).to_list(30)
+        for article in article_list:
+            articles.append(article_serializer(article))
+
+    return articles
+
+
+# 現在~1週間前(計8日間)記事を取得する。
+async def db_get_one_week_articles() -> List[dict]:
+    one_week = []
+    for day in range(8):
+        tokyo_day = datetime.utcnow() - timedelta(days=7-day) + timedelta(hours=9)
+        one_week.append({"date": tokyo_day.strftime("%Y.%m.%d")})
+
+    articles = []
+    db_articles = await collection_articles.find({"$or": one_week}).sort("datetime", -1).to_list(None)
+    for article in db_articles:
+        articles.append(article_serializer(article))
+
+    return articles
+
+
+# 200件の記事を取得する。databaseの新しい(not 新着記事)順に取ってくるのでtest用。
 async def db_get_articles() -> List[dict]:
     articles = []
-    for article in await collection_articles.find().to_list(None):
+    for article in await collection_articles.find().to_list(200):
         articles.append(article_serializer(article))
 
     return articles

@@ -7,7 +7,7 @@ from app.auth_utils import AuthJwt
 from typing import List, Union
 from starlette.status import HTTP_201_CREATED
 from app.schemas import Articles, Status
-from app.database import db_get_new_articles, db_get_articles, db_create_articles
+from app.database import db_get_articles, db_create_articles, db_get_one_week_articles, db_get_groups_articles, db_get_group_articles
 
 from decouple import config
 
@@ -25,11 +25,22 @@ async def get_articles(request: Request):
     return res
 
 
-# @router.get('/api/newArticle', response_model=Union[List[Articles], dict])
-@router.get('/api/newArticle')
+@router.get('/api/article/{group_name}')
+async def get_articles_group(group_name: str, request: Request):
+    res = await db_get_group_articles(group_name)
+    return res
+
+
+@router.get('/api/articles')
 async def get_new_articles(request: Request):
     # auth.verify_jwt(request, root_user)  # GETでは実装しない方向
-    res = await db_get_new_articles()
+    res = await db_get_groups_articles()
+    return res
+
+
+@router.get('/api/oneweek', response_model=Union[List[Articles], dict])
+async def get_one_week_article():
+    res = await db_get_one_week_articles()
     return res
 
 
