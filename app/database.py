@@ -48,12 +48,22 @@ async def db_get_group_articles(group_name) -> List[dict]:
 async def db_get_groups_articles() -> List[dict]:
     group_list = ['blackpink', 'aespa', 'ive', 'gi-dle', 'nmixx', 'kep1er']
     articles = []
+
+    def remove_duplicated_article(articles):
+        filtered_articles = []
+        for article in articles:
+            if not article in filtered_articles:
+                filtered_articles.append(article)
+
+        return filtered_articles
+
     for group in group_list:
         article_list = await collection_articles.find({"group": group}).sort("datetime", -1).to_list(30)
         for article in article_list:
             articles.append(article_serializer(article))
 
-    return articles
+    # return articles
+    return remove_duplicated_article(articles)
 
 
 # 現在~1週間前(計8日間)記事を取得する。
