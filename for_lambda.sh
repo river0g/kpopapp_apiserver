@@ -1,3 +1,7 @@
+echo '環境を本番環境に切り替えています。'
+python3 switch_env.py prod
+echo '環境の切り替えが終わりました。'
+
 cd apienv/lib/python3.8/site-packages
 sudo zip -r9 ../../../../function.zip .
 cd ../../../../
